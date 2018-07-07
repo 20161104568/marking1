@@ -118,7 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="seqlist.h" />
+    <ClInclude Include="mark.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

@@ -1,4 +1,4 @@
-#include "seqlist.h"
+#include "mark.h"
 int main()
 {
 	while (1)
@@ -6,19 +6,19 @@ int main()
 		switch (menu_select())
 		{
 		case 1:
-			t_output();
+			s_display();
 			break;
 		case 2:
-			s_output();
+			t_display();
 			break;
 		case 3:
 			mark();
 			break;
 		case 4:
-			show();
+			output();
 			break;
 		case 5:
-			ranking();
+			sort();
 			break;
 		case 0:
 			save();
@@ -37,11 +37,11 @@ extern int menu_select()
 	printf("          | ------------------------------ |          \n");
 	printf("          |            主菜单项            |          \n");
 	printf("          | ------------------------------ |          \n");
-	printf("          |	  1 --- 显示裁判信息       |          \n");
-	printf("          |	  2 --- 显示选手信息	   |          \n");
-	printf("          |	  3 --- 裁判打分环节	   |          \n");
-	printf("          |	  4 --- 显示选手成绩	   |          \n");
-	printf("          |	  5 --- 显示选手排名	   |          \n");
+	printf("          |	  1 --- 选手信息       |          \n");
+	printf("          |	  2 --- 裁判信息	   |          \n");
+	printf("          |	  3 --- 打分	       |          \n");
+	printf("          |	  4 --- 选手成绩	   |          \n");
+	printf("          |	  5 --- 选手排名	   |          \n");
 	printf("          |	  0 --- 退出系统  	   |          \n");
 	do
 	{
@@ -52,7 +52,7 @@ extern int menu_select()
 	return MenuItem;
 }
 //裁判信息输出模块
-extern void t_output()
+extern void t_display()
 {
 	FILE *fp;
 	int i;
@@ -73,7 +73,7 @@ extern void t_output()
 	fclose(fp);
 }
 //选手信息输出模块
-extern void s_output()
+extern void s_display()
 {
 	FILE *fp;
 	int i;
@@ -130,7 +130,7 @@ extern void mark()
 	}
 }
 //显示选手成绩模块
-extern void show()
+extern void output()
 {
 	int i;
 	printf("序号 姓名   性别  节目名称  类别   节目类别   班级    电话号码  平均成绩\n");
@@ -140,7 +140,7 @@ extern void show()
 	}
 }
 //显示选手排名模块
-extern void ranking()
+extern void sort()
 {
 	int i,j;
 	int x;
@@ -150,8 +150,6 @@ extern void ranking()
 	{
 		t[i] = s[i];
 	}
-	//唱歌选手排名
-	//struct Student sing[100];
 	x = 0;
 	for (i = 0; i < 6; i++)
 	{
@@ -175,52 +173,50 @@ extern void ranking()
 		}
 	}
 	printf("----唱歌类排名----\n");
-	printf("序号 姓名   性别  节目名称 类别 节目类别   班级    电话号码  平均成绩  排名\n");
+	printf("序号 姓名     节目名称  节目类别     平均成绩  排名\n");
 	for (i = 0; i < x; i++)
 	{
-		printf("%3d %6s %4s %9s %3s %8s %10s %9ld %8.2f %5d\n", sing[i].snum, sing[i].name, sing[i].sex, sing[i].showname, &sing[i].type, sing[i].showtype, sing[i].stuclass, sing[i].num, sing[i].grade, i+1);
+		printf("%3d %6s  %9s  %8s  %8.2f %5d\n", sing[i].snum, sing[i].name,  sing[i].showname, sing[i].showtype, sing[i].grade, i+1);
 	}
-	//舞蹈选手排名
-	//struct Student dance[100];
 	x = 0;
 	for (i = 0; i < 6; i++)
 	{
 		if (strcmp(t[i].type, "B") == 0)
 		{
-			dance[x] = t[i];
+			magic[x] = t[i];
 			x++;
 		}
 	}
-	damount = x;
+	mamount = x;
 	for (i = 0; i < x - 1; i++)
 	{
 		for (j = 0; j < x - 1; j++)
 		{
-			if (dance[j].grade < dance[j + 1].grade)
+			if (magic[j].grade < magic[j + 1].grade)
 			{
-				temp = dance[j];
-				dance[j] = dance[j + 1];
-				dance[j + 1] = temp;
+				temp = magic[j];
+				magic[j] = magic[j + 1];
+				magic[j + 1] = temp;
 			}
 		}
 	}
-	printf("----舞蹈类排名----\n");
-	printf("序号 姓名   性别  节目名称 类别 节目类别   班级    电话号码  平均成绩  排名\n");
+	printf("----魔术类排名----\n");
+	printf("序号 姓名     节目名称  节目类别     平均成绩  排名\n");
 	for (i = 0; i < x; i++)
 	{
-		printf("%3d %6s %4s %9s %3s %8s %10s %9ld %8.2f %5d\n", dance[i].snum, dance[i].name, dance[i].sex, dance[i].showname, dance[i].type, dance[i].showtype, dance[i].stuclass, dance[i].num, dance[i].grade, i + 1);
+		printf("%3d %6s  %9s  %8s  %8.2f %5d\n", magic[i].snum, magic[i].name,magic[i].showname, magic[i].showtype, magic[i].grade, i + 1);
 	}
 }
 //保存模块
 int samount;
-int damount;
+int mamount;
 extern void save()
 {
 	int i;
 	FILE *fp;
 	FILE *fw;
 	fp = fopen("sing.txt", "w");
-	fw = fopen("dance.txt", "w");
+	fw = fopen("magic.txt", "w");
 	if (fp == NULL)
 	{
 		printf("文件打开失败！\n");
@@ -241,9 +237,9 @@ extern void save()
 	}
 	else
 	{
-		for (i = 0; i<damount; i++)
+		for (i = 0; i<mamount; i++)
 		{
-			fprintf(fw,"%d %s %s %s %s %s %s %ld %.2f %d\n", dance[i].snum, dance[i].name, dance[i].sex, dance[i].showname, dance[i].type, dance[i].showtype, dance[i].stuclass, dance[i].num, dance[i].grade, i + 1);
+			fprintf(fw,"%d %s %s %s %s %s %s %ld %.2f %d\n", magic[i].snum, magic[i].name, magic[i].sex, magic[i].showname, magic[i].type, magic[i].showtype, magic[i].stuclass, magic[i].num, magic[i].grade, i + 1);
 		}
 	}
 	fclose(fp);
