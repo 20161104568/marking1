@@ -1,0 +1,3 @@
+﻿  MARK.cpp
+c:\users\宗钰杰\desktop\mark\mark\mark\mark.cpp(131): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+  MARK.vcxproj -> C:\Users\宗钰杰\Desktop\mark\MARK\Debug\MARK.exe
