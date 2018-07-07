@@ -5,307 +5,164 @@
 //  Created by 20161104568 on 2018/7/7.
 //  Copyright © 2018年 20161104568. All rights reserved.
 //
+#pragma once
+#ifndef _STUDENT
 #define _STUDENT
-#define _REFEREE
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <string.h>
 
-extern int amount;//声明全局变量amount
-struct  Student//student 结构体
+//extern int amount;
+
+struct Teacher
 {
-    int id;
-    char name;
-    char sex;
-    char program;
-    char type;
-    char number;
-    char cclass;
-    double score[10];
-    double sum;
-    double average;
-    double max;
-    double min;
+    char name[10];
+    char sex[5];
+    long num;
 };
-struct  Student s[50];//结构体数组
-
-struct Referee
+struct Teacher t[100];
+struct Student
 {
-    char name;
-    char sex;
-    char tel;
+    int snum;
+    char name[10];
+    char sex[5];
+    char showname[30];
+    char showtype[10];
+    char stuclass[10];
+    long num;
+    float grade;
 };
-struct  Referee r[50];//结构体数组
-
-
-
-
-//添加模块
-void inputBystudent()
+struct Student s[100];
+extern int menu_select();
+extern void t_output();
+extern void s_output();
+extern void mark();
+#endif
+int main()
 {
-    int i;
-    i=amount;
-    printf("请输入编号:\n");
-    scanf("%d",&s[i].id);
-    printf("请输入姓名:\n");
-    scanf("%s",&s[i].name);
-    printf("请输入性别:\n");
-    scanf("%s",&s[i].sex);
-    printf("请输入节目名称:\n");
-    scanf("%s",&s[i].program);
-    printf("请输入节目类型:\n");
-    scanf("%s",&s[i].type);
-    printf("请输入电话号码:\n");
-    scanf("%s",&s[i].number);
-    printf("请输入班级:\n");
-    scanf("%s",&s[i].cclass);
-    amount=amount+1;
+    while (1)
+    {
+        switch (menu_select())
+        {
+            case 1:
+                t_output();
+                break;
+            case 2:
+                s_output();
+                break;
+            case 3:
+                mark();
+                break;
+            case 4:
+                //show();
+                break;
+            case 0:
+                //save();
+                printf("Thank you for using！\n");
+                system("pause");
+                return 0;
+        }
+    }
 }
-void inputByreferee()
+//菜单模块
+extern int menu_select()
 {
-    int i;
-    i=amount;
-    printf("请输入姓名:\n");
-    scanf("%s",&r[i].name);
-    printf("请输入性别:\n");
-    scanf("%s",&r[i].sex);
-    printf("请输入电话号码:\n");
-    scanf("%d",&r[i].tel);
-    amount=amount+1;
-}
-void input()
-{
-    char menuItem;
-    printf("	| --------------------------------------------|\n");
-    printf("	|                  查询子菜单项               |\n");
-    printf("	| --------------------------------------------|\n");
-    printf("	|                    1---添加学生             |\n");
-    printf("	|                    2---添加裁判             |\n");
-    printf("	| --------------------------------------------|\n");
+    int MenuItem;
+    printf("\n ");
+    printf("         | ***********打分系统*********** |          \n");
+    printf("          | ------------------------------ |          \n");
+    printf("          |            主菜单项            |          \n");
+    printf("          | ------------------------------ |          \n");
+    printf("          |	  1 --- 显示裁判信息       |          \n");
+    printf("          |	  2 --- 显示选手信息	   |          \n");
+    printf("          |	  3 --- 裁判打分环节	   |          \n");
+    printf("          |	  4 --- 显示参赛成绩	   |          \n");
+    printf("          |	  0 --- 退出系统  	   |          \n");
     do
     {
-        printf("\n请输入菜单项数字(0-2):");
+        printf("\n请输入选项（0－4）：");
         fflush(stdin);
-        scanf("%c",&menuItem);
-    }while(menuItem<'1'||menuItem>'2');
-    switch(menuItem)
+        scanf("%d", &MenuItem);
+    } while (MenuItem<0 || MenuItem>4);
+    return MenuItem;
+}
+//裁判信息输出模块
+extern void t_output()
+{
+    FILE *fp;
+    int i;
+    fp = fopen("//Users//a20161104568//Desktop//teacher.numbers", "r");
+    if (fp == NULL)
     {
-        case  '1':
-            inputBystudent();
-            break;
-        case  '2':
-            inputByreferee();
-            break;
-            
+        printf("文件打开失败！\n");
+        exit(-1);
+    }
+    else
+    {
+        printf("姓名 性别 电话号码\n");
+        for (i = 0; i < 5; i++)
+            fscanf(fp,"%s %s %ld\n", &t[i].name, &t[i].sex, &t[i].num);
+        for (i = 0; i < 5; i++)
+            printf("%2s %3s %8ld\n", t[i].name, t[i].sex, t[i].num);
+    }
+    fclose(fp);
+}
+//选手信息输出模块
+extern void s_output()
+{
+    FILE *fp;
+    int i;
+    fp = fopen("//Users//a20161104568//Desktop//student.numbers", "r");
+    if (fp == NULL)
+    {
+        printf("文件打开失败！\n");
+        exit(-1);
+    }
+    else
+    {
+        printf("序号 姓名   性别  节目名称  节目类别   班级    电话号码\n");
+        for (i = 0; i < 6; i++)
+            fscanf(fp, "%d %s %s %s %s %s %ld\n", & s[i].snum, &s[i].name, &s[i].sex, &s[i].showname, &s[i].showtype, &s[i].stuclass, &s[i].num);
+        for (i = 0; i < 6; i++)
+            printf("%3d %6s %4s %9s %8s %10s %9ld\n", s[i].snum, s[i].name, s[i].sex, s[i].showname, s[i].showtype, s[i].stuclass, s[i].num);
+    }
+    fclose(fp);
+}
+//裁判打分模块
+extern void mark()
+{
+    float grade[10];
+    float sum;
+    int i,j,n,x;
+    float temp;
+    for(n = 0;n < 6;n++)
+    {
+        printf("---请给第 %d 位选手打分---\n", s[n].snum);
+        for (x = 0; x < 5; x++)
+        {
+            printf("请第 %d 位裁判打分:\n", x + 1);
+            scanf("%f", &grade[x]);
+        }
+        for (i = 0; i < 4; i++)
+        {
+            for (j = 0; j < 4; j++)
+            {
+                if (grade[j] > grade[j+1])
+                {
+                    temp = grade[j];
+                    grade[j] = grade[j+1];
+                    grade[j + 1] = temp;
+                }
+            }
+        }
+        sum = 0;
+        for (i = 1; i < 4; i++)
+        {
+            sum = sum + grade[i];
+        }
+        s[j].grade = sum / 3.0;
+        printf("平均成绩：%.2f\n",s[j].grade);
     }
 }
-
-//显示模块
-void outputBystudent()
-{
-    printf("|  编号  |  姓名  |  性别  |  节目名称  |  节目类型  |  电话号码  |  班级  |\n");
-    int i;
-    for(i=0;i<amount;i++)
-    {
-        printf("|%8d",s[i].id);
-        printf("|%8s",s[i].name);
-        printf("|%8s",s[i].sex);
-        printf("|%12s",s[i].program);
-        printf("|%12s",s[i].type);
-        printf("|%12s",s[i].number);
-        printf("|%8s|\n",s[i].cclass);
-    }
-}
-void outputByreferee()
-{
-    printf("|  姓名  |  性别  |  电话号码  |\n");
-    int i;
-    for(i=0;i<amount;i++)
-    {
-        printf("|%8s",r[i].name);
-        printf("|%8s",r[i].sex);
-        printf("|%12s",r[i].tel);
-    }
-    void output()
-    {
-        char menuitem;
-        printf("	| --------------------------------------------|\n");
-        printf("	|                  查询子菜单项               |\n");
-        printf("	| --------------------------------------------|\n");
-        printf("	|                    1---显示学生             |\n");
-        printf("	|                    2---显示裁判             |\n");
-        printf("	| --------------------------------------------|\n");
-        do
-        {
-            printf("\n请输入菜单项数字(0-2):");
-            fflush(stdin);
-            scanf("%c",&menuItem);
-        }while(menuitem<'1'||menuitem>'2');
-        switch(menuitem)
-        {
-            case  '1':
-                outputBystudent();
-                break;
-            case  '2':
-                outputByreferee();
-                break;
-                
-        }
-    }
-    
-    int mark()
-    {
-        int i,n;
-        int flag=1;
-        while (flag)
-        {
-            printf("请输入要评分的参赛者编号:\n");
-            scanf("%d",&n);
-            for (i=0; i<amount;)
-            {
-                if (s[i].id!=n)
-                {
-                    i++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            if(i>=amount||n<=0)
-            {
-                printf("输入编码错误，请重新输入!\n");
-                
-            }
-            else
-            {
-                printf("请输入第一个裁判打的分数:\n");
-                scanf("%l",&s[n-1].score[0]);
-                printf("请输入第二个裁判打的分数:\n");
-                scanf("%l",&s[n-1].score[1]);
-                printf("请输入第三个裁判打的分数:\n");
-                scanf("%l",&s[n-1].score[2]);
-                printf("请输入第四个裁判打的分数:\n");
-                scanf("%l",&s[n-1].score[3]);
-                printf("请输入第五个裁判打的分数:\n");
-                scanf("%l",&s[n-1].score[4]);
-                flag=0;
-            }
-        }
-        printf("裁判评分成功!\n");
-        return 0;
-    }
-    int average()
-    {
-        int i,j;
-        s[i].sum=0;
-        s[i].average=0;
-        for(i=0;i<amount;i++)
-        {
-            s[i].max=s[i].score[0];
-            s[i].min=s[i].score[0];
-            for(j=0;j<5;j++)
-            {
-                if(s[i].score[j]>s[i].max)
-                {
-                    s[i].max=s[i].score[j];
-                }
-                if(s[i].score[j]<s[i].min)
-                {
-                    s[i].min=s[i].score[j];
-                }
-                s[i].sum+=s[i].score[j];
-            }
-            s[i].sum=s[i].sum - s[i].max - s[i].min;
-            s[i].average = s[i].sum / 3;
-        }
-        printf("计算平均分成功!\n");
-        return 0;
-    }
-    
-    int show()
-    {
-        int i;
-        for(i=0;i<amount;i++)
-        {
-            printf("参赛者姓名为:",s[i].name);
-            printf("编号:",s[i].id);
-            printf("性别:",s[i].sex);
-            printf("节目名称:",s[i].program);
-            printf("节目类别:",s[i].type);
-            printf("电话:",s[i].number);
-            printf("班级:",s[i].cclass);
-            printf("第一个评委",r[0].name);
-            printf("分数是:",s[i].score[0]);
-            printf("第二个评委",r[1].name);
-            printf("分数是:",s[i].score[1]);
-            printf("第三个评委",r[2].name);
-            printf("分数是:",s[i].score[2]);
-            printf("第四个评委",r[3].name);
-            printf("分数是:",s[i].score[3]);
-            printf("第五个评委",r[4].name);
-            printf("分数是:",s[i].score[4]);
-            printf("去掉一个最低分为:",s[i].min);
-            printf("去掉一个最高分为:",s[i].max);
-            printf("所得的平均成绩是:",s[i].average);
-            return 0;
-        }
-        
-        //菜单模块
-        int menu_select()
-        {
-            int MenuItem;
-            
-            printf("\n ");
-            printf("          | *********打分系统********* |          \n");
-            printf("          | ---------------------------------- |          \n");
-            printf("          |              主菜单项              |          \n");
-            printf("          | ---------------------------------- |          \n");
-            printf("          |	  1 --- 添加信息  	       |          \n");
-            printf("          |	  2 --- 显示信息	       |          \n");
-            printf("          |	  3 --- 裁判打分	       |          \n");
-            printf("          |	  4 --- 计算分值	       |          \n");
-            printf("          |	  5 --- 显示分值	       |          \n");
-            printf("          |	  0 --- 退出系统  	       |          \n");		
-            
-            do
-            {		
-                printf("\n请输入选项（0－5）：");
-                fflush(stdin);  //清空输入缓冲区       
-                scanf("%d",&MenuItem);
-            }while(MenuItem<0||MenuItem>5);
-            return MenuItem;
-        }
-        int main()
-        { 
-            struct Student s[50];
-            struct Referee r[50];
-            while(1)//循环一直为真且执行 
-            {
-                switch(menu_select())//选择菜单 
-                {
-                    case 1:
-                        input(s,r);//添加				
-                        break;
-                    case 2:
-                        output(s,r);//输出 
-                        break;
-                    case 3:
-                        mark(s);//打分
-                        break;
-                    case 4:
-                        compute(s);//计算 
-                        break;
-                    case 5:
-                        display(s,r);//显示
-                        break;
-                    case 0:
-                        printf("Thank you for using！\n");
-                        system("pause");
-                        return 0;
-                }
-            }
-        }
         
